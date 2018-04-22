@@ -23,11 +23,15 @@
     </div>
 
     <div class="container">
+        <br/>
         <form action="/escrita" method="GET">
-            <input type="text" name="date_ini" id="date_ini">
-            <input type="text" name="date_fim" id="date_fim">
+            Anotações realizadas entre
+            <input type="text" name="date_ini" id="date_ini" placeholder="dd/mm/yyyy">
+            e entre
+            <input type="text" name="date_fim" id="date_fim" placeholder="dd/mm/yyyy">
             <button type="submit">Buscar</button>
         </form>
+        <br/>
 
         {% for anotacao in anotacoes %}
             <div class="typography">

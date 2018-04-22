@@ -21,6 +21,15 @@ div.flashes {
     font-size: 20px;
 }
 
+form div textarea {
+    display: inline;
+}
+
+form div {
+    text-align: center;
+    width: 100%;
+}
+
 body{
     background-color: aquamarine;
     background-image: url("../diario.jpg");
