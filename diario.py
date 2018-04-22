@@ -24,13 +24,13 @@ db.session.commit()
 @app.route("/")
 def menu():
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return render_template('login.html')
     return render_template('index.html')
 
 @app.route("/escrita")
 def escrita():
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return render_template('login.html')
 
     date_ini = request.args.get('date_ini')
     date_fim = request.args.get('date_fim')
@@ -53,7 +53,7 @@ def escrita():
 @app.route("/escrevaaqui")
 def escreva():
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return render_template('login.html')
 
     return render_template('escrevaaqui.html')
 
@@ -61,7 +61,7 @@ def escreva():
 def salva():
 
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return render_template('login.html')
 
     dia = request.args.get("dia")
     anotacao = Anotacao(texto = dia, date = datetime.now())
@@ -88,7 +88,7 @@ def login():
 @app.route("/logout")
 def logout():
     session['login'] = False
-    return redirect('/login')
+    return render_template('login.html')
 
 if __name__ == "__main__":
     app.secret_key = 'Shhhh! This is a Secret!'
