@@ -7,6 +7,19 @@ h1{
     width: 100%;
 }
 
+div#login form div {
+    text-align: center;
+}
+
+#login {
+    width: 217px;
+}
+
+div.flashes {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+}
 
 body{
     background-color: aquamarine;
