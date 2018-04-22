@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/manipulation.js') }}"></script>
+    <title>Diario</title>
+</head>
+
+<body onload="setCenter()">
+    <ul>
+        <li>
+            <a class="active" href="/">Menu Inicial</a>
+        </li>
+    </ul>
+    </div>
+
+    <div class="container">
+        <form action="/escrita" method="GET">
+            <input type="text" name="date_ini" id="date_ini">
+            <input type="text" name="date_fim" id="date_fim">
+            <button type="submit">Buscar</button>
+        </form>
+
+        {% for anotacao in anotacoes %}
+            <div class="typography">
+                {{anotacao.texto}}
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

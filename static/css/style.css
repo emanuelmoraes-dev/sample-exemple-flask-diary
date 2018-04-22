@@ -1,0 +1,49 @@
+h1{
+    color: blue
+}
+
+#center {
+    text-align: center;
+    width: 100%;
+}
+
+
+body{
+    background-color: aquamarine;
+    background-image: url("../diario.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #fa07c5;
+    background-color: #fa07c5;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: rgb(153, 10, 110);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: rgb(15, 196, 228);
+}
+
+div.typography {
+    display: inline-block;
+    background-color: white;
+    width: 48%;
+    margin: 1px;
+}
