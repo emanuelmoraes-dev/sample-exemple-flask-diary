@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, session, flash, url_for, redi
 from flask.ext.session import Session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import os
 
 SESSION_TYPE = 'memcache'
 
@@ -24,13 +23,13 @@ db.session.commit()
 @app.route("/")
 def menu():
     if 'login' not in session or not session['login']:
-        return render_template('login.html')
+        return redirec('/login')
     return render_template('index.html')
 
 @app.route("/escrita")
 def escrita():
     if 'login' not in session or not session['login']:
-        return render_template('login.html')
+        return redirec('/login')
 
     date_ini = request.args.get('date_ini')
     date_fim = request.args.get('date_fim')
@@ -53,7 +52,7 @@ def escrita():
 @app.route("/escrevaaqui")
 def escreva():
     if 'login' not in session or not session['login']:
-        return render_template('login.html')
+        return redirec('/login')
 
     return render_template('escrevaaqui.html')
 
@@ -61,7 +60,7 @@ def escreva():
 def salva():
 
     if 'login' not in session or not session['login']:
-        return render_template('login.html')
+        return redirec('/login')
 
     dia = request.args.get("dia")
     anotacao = Anotacao(texto = dia, date = datetime.now())
@@ -88,7 +87,7 @@ def login():
 @app.route("/logout")
 def logout():
     session['login'] = False
-    return render_template('login.html')
+    return redirec('/login')
 
 if __name__ == "__main__":
     app.secret_key = 'Shhhh! This is a Secret!'
