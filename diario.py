@@ -5,8 +5,12 @@ from datetime import datetime
 
 SESSION_TYPE = 'memcache'
 
-sess = Session()
 app = Flask(__name__, template_folder=".", static_folder="static")
+
+sess = Session()
+app.secret_key = 'Shhhh! This is a Secret!'
+app.config['SESSION_TYPE'] = 'filesystem'
+sess.init_app(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -23,13 +27,13 @@ db.session.commit()
 @app.route("/")
 def menu():
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 @app.route("/escrita")
 def escrita():
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return redirect(url_for('login'))
 
     date_ini = request.args.get('date_ini')
     date_fim = request.args.get('date_fim')
@@ -52,7 +56,7 @@ def escrita():
 @app.route("/escrevaaqui")
 def escreva():
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return redirect(url_for('login'))
 
     return render_template('escrevaaqui.html')
 
@@ -60,7 +64,7 @@ def escreva():
 def salva():
 
     if 'login' not in session or not session['login']:
-        return redirect('/login')
+        return redirect(url_for('login'))
 
     dia = request.args.get("dia")
     anotacao = Anotacao(texto = dia, date = datetime.now())
@@ -71,6 +75,7 @@ def salva():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+
     username = request.form.get('username')
     senha = request.form.get('senha')
 
@@ -87,11 +92,7 @@ def login():
 @app.route("/logout")
 def logout():
     session['login'] = False
-    return redirect('/login')
+    return redirect(url_for('login'))
 
 if __name__ == "__main__":
-    app.secret_key = 'Shhhh! This is a Secret!'
-    app.config['SESSION_TYPE'] = 'filesystem'
-
-    sess.init_app(app)
     app.run()
