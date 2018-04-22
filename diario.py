@@ -1,7 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, flash, url_for, redirect
+from flask.ext.session import Session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import os
 
+SESSION_TYPE = 'memcache'
+
+sess = Session()
 app = Flask(__name__, template_folder=".", static_folder="static")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -18,10 +23,15 @@ db.session.commit()
 
 @app.route("/")
 def menu():
+    if 'login' not in session or not session['login']:
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 @app.route("/escrita")
 def escrita():
+    if 'login' not in session or not session['login']:
+        return redirect(url_for('login'))
+
     date_ini = request.args.get('date_ini')
     date_fim = request.args.get('date_fim')
 
@@ -42,10 +52,17 @@ def escrita():
 
 @app.route("/escrevaaqui")
 def escreva():
+    if 'login' not in session or not session['login']:
+        return redirect(url_for('login'))
+
     return render_template('escrevaaqui.html')
 
 @app.route("/salvado")
 def salva():
+
+    if 'login' not in session or not session['login']:
+        return redirect(url_for('login'))
+
     dia = request.args.get("dia")
     anotacao = Anotacao(texto = dia, date = datetime.now())
     db.session.add(anotacao)
@@ -53,5 +70,29 @@ def salva():
     db.session.commit()
     return render_template('escrevaaqui.html')
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    username = request.form.get('username')
+    senha = request.form.get('senha')
+
+    if request.method == 'GET':
+        return render_template("login.html")
+
+    if username == 'admin' and senha == 'admin':
+        session['login'] = True
+        return render_template("index.html")
+    else:
+        flash("Login Inválido")
+        return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session['login'] = False
+    return redirect(url_for('login'))
+
 if __name__ == "__main__":
+    app.secret_key = 'Shhhh! This is a Secret!'
+    app.config['SESSION_TYPE'] = 'filesystem'
+
+    sess.init_app(app)
     app.run()
