@@ -1,13 +1,12 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import os
 
-diario = Flask("diario", template_folder=".", static_folder="static")
+app = Flask(__name__, template_folder=".", static_folder="static")
 
-diario.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-diario.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(diario)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 class Anotacao(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -17,11 +16,11 @@ class Anotacao(db.Model):
 db.create_all()
 db.session.commit()
 
-@diario.route("/")
+@app.route("/")
 def menu():
     return render_template('index.html')
 
-@diario.route("/escrita")
+@app.route("/escrita")
 def escrita():
     date_ini = request.args.get('date_ini')
     date_fim = request.args.get('date_fim')
@@ -41,11 +40,11 @@ def escrita():
 
     return render_template('escrita.html', anotacoes=anotacoes)
 
-@diario.route("/escrevaaqui")
+@app.route("/escrevaaqui")
 def escreva():
     return render_template('escrevaaqui.html')
 
-@diario.route("/salvado")
+@app.route("/salvado")
 def salva():
     dia = request.args.get("dia")
     anotacao = Anotacao(texto = dia, date = datetime.now())
@@ -55,4 +54,4 @@ def salva():
     return render_template('escrevaaqui.html')
 
 if __name__ == "__main__":
-    diario.run()
+    app.run()
